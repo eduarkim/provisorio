@@ -195,12 +195,11 @@ const data = {
     ],
   };
  
- 
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     pintarCheckboxs(data.events);
     pintarTarjetas(data.events);
 
-    const checkboxes = document.getElementsByName("checkcategory");
+    const checkboxes = document.querySelectorAll('input[name="checkcategory"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", () => {
             const selectedCategories = Array.from(checkboxes)
