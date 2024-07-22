@@ -216,7 +216,6 @@ function cargarDetalles() {
                             <p class="card-text">Category: ${evento.category}</p>
                             <p class="card-text">Place: ${evento.place}</p>
                             <p class="card-text">Capacity: ${evento.capacity}</p>
-                            <p class="card-text">Assistance: ${evento.estimate}</p>
                             <p class="card-text">Price: US$ ${evento.price}</p>
                         </div>
                     </div>
