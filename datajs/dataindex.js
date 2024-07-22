@@ -194,113 +194,112 @@ const data = {
       },
     ],
   };
-
-  document.addEventListener("DOMContentLoaded", () => {
+ 
+ 
+document.addEventListener("DOMContentLoaded", () => {
     pintarCheckboxs(data.events);
     pintarTarjetas(data.events);
-  
-    // Añadir event listeners a los checkboxes después de generarlos
+
     const checkboxes = document.getElementsByName("checkcategory");
-    Array.from(checkboxes).forEach(checkbox => {
-      checkbox.addEventListener("change", () => {
-        const selectedCategories = Array.from(checkboxes)
-          .filter(checkbox => checkbox.checked)
-          .map(checkbox => checkbox.value);
-        const texto = document.getElementById("buscador").value.toLowerCase();
-        filterTarjetas(selectedCategories, texto);
-      });
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+            const selectedCategories = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            const texto = document.getElementById("buscador").value.toLowerCase();
+            filterTarjetas(selectedCategories, texto);
+        });
     });
-  
-    // Añadir event listener al filtro de texto
-    const filterTexto = document.getElementById("buscador");
+
+    let filterTexto = document.getElementById("buscador");
     filterTexto.addEventListener("keyup", function (event) {
-      const texto = event.target.value.toLowerCase();
-      const selectedCategories = Array.from(checkboxes)
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value);
-      filterTarjetas(selectedCategories, texto);
+        const texto = event.target.value.toLowerCase();
+        const selectedCategories = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+        filterTarjetas(selectedCategories, texto);
     });
-  });
-  
-  function pintarCheckboxs(eventos) {
+});
+
+function pintarCheckboxs(eventos) {
     const contenCheckboxs = document.getElementById("divcheckboxs");
     if (!contenCheckboxs) {
-      console.error("El contenedor de checkboxes no existe.");
-      return;
+        console.error("El contenedor de checkboxes no existe.");
+        return;
     }
-  
+
     const categories = [...new Set(eventos.map(event => event.category))];
     console.log("Categorías:", categories); // Depuración
-  
+
     categories.forEach((category, index) => {
-      const checkbox = document.createElement('div');
-      checkbox.className = "form-check form-check-inline";
-      checkbox.innerHTML = `
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" value="${category}" id="checkbox-categorias-${index}" name="checkcategory">
-          <label class="form-check-label" for="checkbox-categorias-${index}">
-            ${category}
-          </label>
-        </div>
-      `;
-      contenCheckboxs.appendChild(checkbox);
+        const checkbox = document.createElement('div');
+        checkbox.className = "form-check form-check-inline";
+        checkbox.innerHTML = `
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="${category}" id="checkbox-categoria-${index}" name="checkcategory">
+                <label class="form-check-label" for="checkbox-categoria-${index}">
+                    ${category}
+                </label>
+            </div>
+        `;
+        contenCheckboxs.appendChild(checkbox);
     });
-  }
-  
-  function pintarTarjetas(eventos) {
+}
+
+function pintarTarjetas(eventos) {
     const contenedor = document.getElementById("divtarjetas");
     contenedor.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevas tarjetas
-  
+
     eventos.forEach(evento => {
-      const tarjeta = document.createElement('div');
-      tarjeta.className = "card";
-      tarjeta.dataset.category = evento.category; // Añadir el atributo data-category
-  
-      tarjeta.innerHTML = `
-        <div class="card col">
-          <img class="card-img-top" src="${evento.image}" alt="${evento.name}">
-          <div class="card-body">
-            <h5 class="card-title">${evento.name}</h5>
-            <p class="card-text">${evento.description}</p>
-            <p class="card-text">${evento.category}</p>
-          </div>
-          <div class="card-footer d-flex justify-content-between">
-            <span>${evento.price}</span>
-            <a href="./details.html" class="btn btn-primary">Details</a>
-          </div>
-        </div>
-      `;
-  
-      contenedor.appendChild(tarjeta);
+        const tarjeta = document.createElement('div');
+        tarjeta.className = "card";
+        tarjeta.dataset.category = evento.category; // Añadir el atributo data-category
+
+        tarjeta.innerHTML = `
+            <div class="card col">
+                <img class="card-img-top" src="${evento.image}" alt="${evento.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${evento.name}</h5>
+                    <p class="card-text">${evento.description}</p>
+                    <p class="card-text">${evento.category}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <span>${evento.price}</span>
+                    <a href="./details.html?id=${evento._id}" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        `;
+
+        contenedor.appendChild(tarjeta);
     });
-  }
-  
-  function filterTarjetas(selectedCategories, texto = "") {
+}
+
+function filterTarjetas(selectedCategories, texto = "") {
     const contenedor = document.getElementById("divtarjetas");
     const tarjetas = contenedor.getElementsByClassName("card");
     let hayResultados = false; // Variable para verificar si hay resultados
-  
+
     Array.from(tarjetas).forEach(tarjeta => {
-      const categoria = tarjeta.dataset.category;
-      const nombre = tarjeta.querySelector(".card-title").innerText.toLowerCase();
-      const descripcion = tarjeta.querySelector(".card-text").innerText.toLowerCase();
-  
-      const coincideCategoria = selectedCategories.length === 0 || selectedCategories.includes(categoria);
-      const coincideTexto = nombre.includes(texto) || descripcion.includes(texto);
-  
-      if (coincideCategoria && coincideTexto) {
-        tarjeta.style.display = "block";
-        hayResultados = true; // Hay al menos un resultado
-       
-      } else {
-        tarjeta.style.display = "none";
-      }
+        const categoria = tarjeta.dataset.category;
+        const nombre = tarjeta.querySelector(".card-title").innerText.toLowerCase();
+        const descripcion = tarjeta.querySelector(".card-text").innerText.toLowerCase();
+
+        const coincideCategoria = selectedCategories.length === 0 || selectedCategories.includes(categoria);
+        const coincideTexto = nombre.includes(texto) || descripcion.includes(texto);
+
+        if (coincideCategoria && coincideTexto) {
+            tarjeta.style.display = "block";
+            hayResultados = true; // Hay al menos un resultado
+        } else {
+            tarjeta.style.display = "none";
+        }
     });
-  }
 
+    // Mostrar u ocultar el mensaje de no resultados
+    document.getElementById("mensajeNoResultados").style.display = hayResultados ? "none" : "block";
+}
 
-  
-  /*
+ /* 
   document.addEventListener("DOMContentLoaded", () => {
     pintarCheckboxs(data.events);
     pintarTarjetas(data.events);
